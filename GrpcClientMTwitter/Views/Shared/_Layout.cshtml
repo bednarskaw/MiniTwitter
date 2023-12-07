@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Your Twitter App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha384-pzjw8cmi8Y+Kx4+P5Kas5XRiXMtn4RMPBSqOLMCxz9ATFWhvrUJLDOH7C2KR8fDI" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #007bff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-container {
+            background-color: #007bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .content-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            margin-left: 20px;
+            overflow: auto;
+        }
+
+        .tweets-container {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: white;
+            width: calc(100% - 220px);
+            margin-right: 50px;
+            margin-left: 150px;
+            margin-top: 0.5px;
+            position: fixed;
+        }
+
+        .tweets-card {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            width: calc(100% - 200px);
+            margin-right: 0px;
+            margin-left: 150px;
+            margin-top: 10px;
+        }
+
+        .sidebar {
+            background-color: white;
+            padding: 20px;
+            margin-top: -30px;
+           border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 100%; 
+            position: fixed; 
+            left: 0;
+        }
+
+        .login-card {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: white;
+        }
+
+        .input-bubble {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+            .input-bubble label,
+            .input-bubble input {
+                max-width: 300px;
+                padding: 10px;
+                border-radius: 20px;
+                outline: none;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin-top: 10px;
+                display: inline-block;
+                transition: border-color 0.3s;
+            }
+
+        .btn-bubble {
+            border: 0.5px solid #ccc;
+            border-radius: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 10px 20px;
+            margin-top: 15px;
+            transition: border-color 0.3s; 
+        }
+
+        .nav-link-bubble {
+            display: block;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border: 0.5px solid #007bff;
+            border-radius: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #007bff;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            text-align: center;
+        }
+
+            .nav-link-bubble:hover {
+                background-color: #007bff;
+                color: white;
+            }
+
+            .nav-link-bubble:focus {
+                background-color: #007bff;
+                color: white;
+                outline: none;
+    </style>
+</head>
+<body>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block sidebar">
+                    <div class="sidebar-sticky">
+                        <a class="nav flex-column">
+                            <p class="nav-item">
+                                <a class="nav-link nav-link-bubble" style="margin-top: 30px" href="/Tweet/Index">
+                                    Home
+                                </a>
+                            </p>
+                            <p class="nav-item">
+                                <a class="nav-link nav-link-bubble" href="/Tweets/Index">
+                                    Mine Posts
+                                </a>
+                            </p>
+                            <p class="nav-item">
+                                <a class="nav-link nav-link-bubble" href="/Account/Logout">
+                                    Logout
+                                </a>
+                            </p>
+                        </a>
+                    </div>
+                </nav>
+                        @RenderBody()
+            </div>
+        </div>
+    }
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <!-- Content for non-authenticated users (login page) -->
+        @RenderBody()
+    }
+
+    <!-- Bootstrap JS and other scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

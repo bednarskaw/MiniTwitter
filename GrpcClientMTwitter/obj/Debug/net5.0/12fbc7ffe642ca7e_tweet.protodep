@@ -1,0 +1,2 @@
+obj\Debug\net5.0\Protos/Tweet.cs \
+obj\Debug\net5.0\Protos/TweetGrpc.cs: Protos/tweet.proto

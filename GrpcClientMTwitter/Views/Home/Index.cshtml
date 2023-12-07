@@ -1,0 +1,27 @@
+﻿@model TweetsViewModel
+
+<!-- Display the input field and post button -->
+@if (User.Identity.IsAuthenticated)
+{<div class="content-container">
+        <div class="tweets-container">
+            <h2>Your Tweet</h2>
+            <form asp-controller="Tweet" asp-action="PostTweet" method="post">
+                <label for="tweetContent">Tweet:</label>
+                <input type="text" id="tweetContent" name="content" required>
+                <button type="submit">Post</button>
+            </form>
+        </div>
+    </div>
+    <div style="margin-top: 140px">
+
+        @foreach (var tweet in Model.LastNTweets)
+        {
+            <div class="content-container">
+                <div class="tweets-card">
+                    "@tweet.Content" - by @tweet.UserName
+                </div>
+            </div>
+        }
+
+    </div>
+}

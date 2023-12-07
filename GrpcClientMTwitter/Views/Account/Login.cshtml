@@ -1,0 +1,20 @@
+﻿<div class="login-container">
+    <div class="login-card">
+        <!-- Displaying an image from the Images folder -->
+        <img src="@Url.Content("~/Images/Logo2.png")" alt="Your Logo" style="max-width: 300px; margin-bottom: 20px;">
+
+        <!-- Your login form or other content goes here -->
+        <form asp-controller="Account" asp-action="Login" method="post">
+            <div class="input-bubble">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="input-bubble">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button class="btn btn-primary btn-bubble" type="submit">Login</button>
+        </form>
+
+    </div>
+</div>
