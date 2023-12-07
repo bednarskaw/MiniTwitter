@@ -24,6 +24,13 @@ namespace GrpcServiceMTwitter.Services
             {
                 return Task.FromResult(new TweetResponse { Message = "User not found" });
             }
+            if (request.Content.Length > 80)
+            {
+                return Task.FromResult(new TweetResponse
+                {
+                    Message = "Tweet too long"
+                });
+            }
             var tweet = new Models.Tweet
             {
                 Content = request.Content,
@@ -43,7 +50,7 @@ namespace GrpcServiceMTwitter.Services
         {
             var tweets = _dbContext.Tweets
                 .OrderByDescending(t => t.Id)
-                .Take(request.Count)
+                .Take(request.Count >= 0? request.Count:0)
                 .Select(t => new TweetRequest { Content = t.Content, UserName = t.User.UserName }) // Assuming 'Content' is the property that holds the tweet message
                 .ToList();
 

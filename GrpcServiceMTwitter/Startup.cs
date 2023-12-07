@@ -51,7 +51,6 @@ namespace GrpcServiceMTwitter
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
                 endpoints.MapGrpcService<TweetService>();
                 //endpoints.MapGrpcReflectionService();
             });
