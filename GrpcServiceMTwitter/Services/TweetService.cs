@@ -19,6 +19,7 @@ namespace GrpcServiceMTwitter.Services
         public override Task<TweetResponse> PostTweet(TweetRequest request, ServerCallContext context)
         {
             Console.WriteLine($"Tweet received on the server from {request.UserName}: {request.Content}");
+            lock (_dbContext) { 
             var user = _dbContext.Users.FirstOrDefault(u => u.UserName == request.UserName);
             if (user == null)
             {
@@ -37,8 +38,9 @@ namespace GrpcServiceMTwitter.Services
                 User = user
             };
 
-            _dbContext.Tweets.Add(tweet);
-            _dbContext.SaveChanges();
+                _dbContext.Tweets.Add(tweet);
+                _dbContext.SaveChanges();
+            }
 
             return Task.FromResult(new TweetResponse
             {
@@ -48,52 +50,63 @@ namespace GrpcServiceMTwitter.Services
 
         public override Task<GetLastNTweetsResponse> GetLastNTweets(GetLastNTweetsRequest request, ServerCallContext context)
         {
-            var tweets = _dbContext.Tweets
+            lock (_dbContext)
+            {
+                var tweets = _dbContext.Tweets
                 .OrderByDescending(t => t.Id)
-                .Take(request.Count >= 0? request.Count:0)
+                .Take(request.Count >= 0 ? request.Count : 0)
                 .Select(t => new TweetRequest { Content = t.Content, UserName = t.User.UserName }) // Assuming 'Content' is the property that holds the tweet message
                 .ToList();
 
-            var response = new GetLastNTweetsResponse
-            {
-                Tweets = { tweets }
-            };
 
-            return Task.FromResult(response);
+                var response = new GetLastNTweetsResponse
+                {
+                    Tweets = { tweets }
+                };
+
+
+                return Task.FromResult(response);
+            }
         }
 
         public override Task<AuthenticationResponse> AuthenticateUser(UserCredentials request, ServerCallContext context)
         {
-            var user = _dbContext.Users
-                .FirstOrDefault(u => u.UserName == request.Username && u.Password == request.Password);
+            lock (_dbContext)
+            {
+                var user = _dbContext.Users
+                    .FirstOrDefault(u => u.UserName == request.Username && u.Password == request.Password);
 
-            int userId = 0;
-            if (user != null)
-            {
-                userId = user.Id;
+                int userId = 0;
+                if (user != null)
+                {
+                    userId = user.Id;
+                }
+                return Task.FromResult(new AuthenticationResponse
+                {
+                    IsAuthenticated = user != null,
+                    Id = userId
+                });
             }
-            return Task.FromResult(new AuthenticationResponse
-            {
-                IsAuthenticated = user != null,
-                Id = userId
-            });
         }
 
         public override Task<GetLastNTweetsResponse> GetAllYourPost(GetLastNTweetsRequest request, ServerCallContext context)
         {
-            var result = _dbContext.Tweets
-             .Where(t => t.User.Id == request.Count)
-             .Select(t => new TweetRequest
-             {
-                 Content = t.Content,
-                 UserName = t.User.UserName
-                 
-             });
-
-            return Task.FromResult(new GetLastNTweetsResponse
+            lock (_dbContext)
             {
-                Tweets = { result }
-            });
+                var result = _dbContext.Tweets
+                 .Where(t => t.User.Id == request.Count)
+                 .Select(t => new TweetRequest
+                 {
+                     Content = t.Content,
+                     UserName = t.User.UserName
+
+                 });
+
+                return Task.FromResult(new GetLastNTweetsResponse
+                {
+                    Tweets = { result }
+                });
+            }
         }
 
     }

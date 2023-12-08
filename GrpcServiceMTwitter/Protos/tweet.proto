@@ -3,10 +3,10 @@
 option csharp_namespace = "GrpcServiceMTwitter";
 
 service Tweet {
-  rpc PostTweet (TweetRequest) returns (TweetResponse);
-  rpc GetLastNTweets(GetLastNTweetsRequest) returns (GetLastNTweetsResponse);
-  rpc AuthenticateUser (UserCredentials) returns (AuthenticationResponse);
-  rpc GetAllYourPost (GetLastNTweetsRequest) returns (GetLastNTweetsResponse);
+  rpc PostTweet (TweetRequest) returns (TweetResponse); // Sends a tweet for server, returns if it was succesfully added
+  rpc GetLastNTweets(GetLastNTweetsRequest) returns (GetLastNTweetsResponse); // Sends a number of tweets to return, returns tweets
+  rpc AuthenticateUser (UserCredentials) returns (AuthenticationResponse); // Sends a password and username, returns userId from database
+  rpc GetAllYourPost (GetLastNTweetsRequest) returns (GetLastNTweetsResponse); // Sends an userId, returns allTweets for this particular user
 }
 
 message TweetRequest {
@@ -35,3 +35,6 @@ message UserCredentials {
   string username = 1;
   string password = 2;
 }
+
+
+

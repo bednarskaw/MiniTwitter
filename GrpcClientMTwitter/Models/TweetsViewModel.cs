@@ -7,7 +7,7 @@ namespace GrpcClientMTwitter.Models
 {
     public class TweetsViewModel
     {
-        public IEnumerable<TweetItem> LastNTweets { get; set; }
+        public IEnumerable<Tweet> LastNTweets { get; set; }
     }
 
 }

@@ -9,11 +9,13 @@ namespace ConsoleAppClient
     {
         static async Task Main(string[] args)
         {
+            // Establishing a connection to the gRPC server
             var channel = GrpcChannel.ForAddress("https://localhost:5001");
             var client = new Tweet.TweetClient(channel);
 
             while (true)
             {
+                // Displaying menu options
                 Console.WriteLine("Choose option: ");
                 Console.WriteLine("1. Write Tweet");
                 Console.WriteLine("2. Get Tweets");
@@ -21,6 +23,7 @@ namespace ConsoleAppClient
 
                 if (option == "1")
                 {
+                    // Sending a new tweet to the server
                     Console.WriteLine("What is your Tweet: ");
                     string msg = Console.ReadLine();
                     var input = new TweetRequest { UserName= "Anonymous", Content= msg};
@@ -29,6 +32,7 @@ namespace ConsoleAppClient
                 }
                 else if (option == "2")
                 {
+                    // Retrieving the latest tweets from the server
                     Console.WriteLine("How many Tweets you want to see: ");
                     int count = int.Parse(Console.ReadLine());
                     var input = new GetLastNTweetsRequest { Count = count };
@@ -39,7 +43,6 @@ namespace ConsoleAppClient
                     }
                 }
             }
-
         }
     }
 }

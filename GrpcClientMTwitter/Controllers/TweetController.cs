@@ -36,7 +36,7 @@ namespace GrpcClientMTwitter.Controllers
             // Convert the gRPC TweetItem to the client's TweetItem
             var tweetsViewModel = new TweetsViewModel
             {
-                LastNTweets = lastNTweetsResponse.Tweets.Select(t => new Models.TweetItem
+                LastNTweets = lastNTweetsResponse.Tweets.Select(t => new Models.Tweet
                 {
                     // Map properties accordingly
                     Content = t.Content,
@@ -88,10 +88,6 @@ namespace GrpcClientMTwitter.Controllers
             {
                 Console.WriteLine($"gRPC error: {ex.Status.Detail}");
             }
-            //finally
-            //{
-            //   await channel.ShutdownAsync();
-            //}
         }
 
 
